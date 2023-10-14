@@ -2,18 +2,19 @@ package onetimepad
 
 import "math/rand"
 
-// An extended version of a Caesar cipher.
 type Substitution struct {
+	// An alphabet is a set of character numbers in Unicode.
 	alphabet []int
-	key      []int
+
+	// The key is a shuffled alphabet.
+	key []int
 }
 
-// Alphabet is a set of chararacter numbers in Unicode.
-// The seed is used for pseudo-random shuffling to generate the key.
 func NewSubstitution(alphabet []int, seed int) Substitution {
 	key := make([]int, len(alphabet))
 	copy(key, alphabet)
 
+	// The seed is used for pseudo-random shuffling to generate the key.
 	gen := rand.New(rand.NewSource(int64(seed)))
 
 	gen.Shuffle(len(key), func(i, j int) {
@@ -34,15 +35,15 @@ func NewSubstitutionWithKey(alphabet, key []int) Substitution {
 }
 
 func (s Substitution) Encrypt(plaintext []int) []int {
-	return translate(s.alphabet, s.key, plaintext)
+	return translate(plaintext, s.alphabet, s.key)
 }
 
 func (s Substitution) Decrypt(ciphertext []int) []int {
-	return translate(s.key, s.alphabet, ciphertext)
+	return translate(ciphertext, s.key, s.alphabet)
 }
 
-// To decrypt, swap the alphabet and key.
-func translate(alphabet, key, message []int) []int {
+// To decrypt, swap the alphabet and key at the inputs.
+func translate(message, alphabet, key []int) []int {
 	keyMap := make(map[int]int, len(key))
 	cipherText := make([]int, len(message))
 

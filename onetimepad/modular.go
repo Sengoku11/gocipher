@@ -1,6 +1,6 @@
 package onetimepad
 
-// Can be used to both encode or decode a message with the same key.
+// XOREncode can be used to both encode or decode a message with the same key.
 // Constraint: len(key) >= len(message).
 func XOREncode(key, message []byte) []byte {
 	result := make([]byte, len(message))
